@@ -1,6 +1,7 @@
 import { useEffect, useState, useContext } from "react";
 import { WishlistContext } from "./WishlistContext";
 import { Link, useParams } from "react-router-dom";
+import "./App.css";
 
 export default function Wishlist() {
   const { state, dispatch } = useContext(WishlistContext);
@@ -20,7 +21,6 @@ export default function Wishlist() {
       setError("Gift name is required");
       return;
     }
-
     dispatch({
       type: "SET_DATA",
       payload: {
@@ -28,7 +28,6 @@ export default function Wishlist() {
         items: [...state.items, { id: Date.now(), name: giftName, reserved: false }],
       },
     });
-
     setGiftName("");
     setError("");
   };
@@ -37,17 +36,13 @@ export default function Wishlist() {
     const updated = state.items.map((item) =>
       item.id === giftId ? { ...item, reserved: true } : item
     );
-
-    dispatch({
-      type: "SET_DATA",
-      payload: { ...state, items: updated },
-    });
+    dispatch({ type: "SET_DATA", payload: { ...state, items: updated } });
   };
 
-  if (!state.wishlist) return <p>Loading...</p>;
+  if (!state.wishlist) return <p className="container">Loading...</p>;
 
   return (
-    <div>
+    <div className="container">
       <h1>{state.wishlist.title}</h1>
       <p>Owner: {state.wishlist.owner}</p>
 
@@ -57,7 +52,7 @@ export default function Wishlist() {
         placeholder="Gift name"
       />
       <button onClick={addGiftHandler}>Add Gift</button>
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      {error && <p className="error">{error}</p>}
 
       <ul>
         {state.items.map((item) => (
@@ -72,7 +67,7 @@ export default function Wishlist() {
         ))}
       </ul>
 
-      <Link to="/">Create new wishlist</Link>
+      <Link to="/" className="link">Create new wishlist</Link>
     </div>
   );
 }
